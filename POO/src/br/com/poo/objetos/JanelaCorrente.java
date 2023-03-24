@@ -31,6 +31,7 @@ public class JanelaCorrente extends JFrame {
 	private JTextField txtSaldo;
 	private JTextField txtLimite;
 	private ContaCorrente corrente;
+	private JTextArea txtResultado;
 
 	/**
 	 * Launch the application.
@@ -178,7 +179,7 @@ public class JanelaCorrente extends JFrame {
 		scrollPane.setBounds(508, 11, 476, 559);
 		contentPane.add(scrollPane);
 		
-		JTextArea txtResultado = new JTextArea();
+		txtResultado = new JTextArea();
 		scrollPane.setViewportView(txtResultado);
 		
 		//Comandos para os botoes
