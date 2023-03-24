@@ -1,30 +1,34 @@
 package br.com.poo.objetos;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.AbstractButton;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import br.com.poo.heranca.ContaPoupanca;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class JanelaPoupanca extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtNumeroBanco;
 	private JTextField txtAgencia;
-	private JTextField txtConta;
+	private JTextField txtNumeroConta;
 	private JTextField txtTitular;
-	private JTextField txtSaldoInicial;
+	private JTextField txtSaldo;
 	private JTextField txtRendimento;
-	private JTextField textValor;
-	private JButton btnVerificaSaldo;
+	private JTextField txtValor;
+	private JButton btnVerificarSaldo;
+	private ContaPoupanca cp;
+	private JButton btnDepositar;
+	private JButton btnSacar;
 
 	/**
 	 * Launch the application.
@@ -35,6 +39,8 @@ public class JanelaPoupanca extends JFrame {
 	 * Create the frame.
 	 */
 	public JanelaPoupanca() {
+		
+		cp = new ContaPoupanca();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 528, 446);
 		contentPane = new JPanel();
@@ -44,13 +50,25 @@ public class JanelaPoupanca extends JFrame {
 		contentPane.setLayout(null);
 		
 		
-		JButton btnDepositar = new JButton("Depositar");
+		btnDepositar = new JButton("Depositar");
+		btnDepositar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				JOptionPane.showMessageDialog(null, cp.depositar(Double.parseDouble(txtValor.getText())));
+			}
+		});
 		btnDepositar.setBounds(209, 237, 89, 23);
 		contentPane.add(btnDepositar);
 		
-		JButton btnsacar = new JButton("Sacar");
-		btnsacar.setBounds(387, 237, 89, 23);
-		contentPane.add(btnsacar);
+		btnSacar = new JButton("Sacar");
+		btnSacar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				JOptionPane.showMessageDialog(null, cp.sacar(Double.parseDouble(txtValor.getText())));
+			}
+		});
+		btnSacar.setBounds(387, 237, 89, 23);
+		contentPane.add(btnSacar);
 		
 		JLabel lblNumerodoBanco = new JLabel("Número do Banco:");
 		lblNumerodoBanco.setBounds(10, 11, 113, 23);
@@ -95,20 +113,20 @@ public class JanelaPoupanca extends JFrame {
 		lblConta.setBounds(139, 11, 101, 23);
 		contentPane.add(lblConta);
 		
-		txtConta = new JTextField();
-		txtConta.addFocusListener(new FocusAdapter() {
+		txtNumeroConta = new JTextField();
+		txtNumeroConta.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(txtConta.getText().equals("") || txtConta.getText().trim().equals("")) {
+				if(txtNumeroConta.getText().equals("") || txtNumeroConta.getText().trim().equals("")) {
 					JOptionPane.showMessageDialog(null,"Número Conta obrigatório");
-					txtConta.setFocusable(true);
-					txtConta.requestFocus();
+					txtNumeroConta.setFocusable(true);
+					txtNumeroConta.requestFocus();
 				}
 			}
 		});
-		txtConta.setColumns(10);
-		txtConta.setBounds(124, 45, 101, 20);
-		contentPane.add(txtConta);
+		txtNumeroConta.setColumns(10);
+		txtNumeroConta.setBounds(124, 45, 101, 20);
+		contentPane.add(txtNumeroConta);
 		
 		JLabel lblTitular = new JLabel("Titular:");
 		lblTitular.setBounds(10, 141, 101, 23);
@@ -133,20 +151,20 @@ public class JanelaPoupanca extends JFrame {
 		lblSaldo.setBounds(293, 11, 101, 23);
 		contentPane.add(lblSaldo);
 		
-		txtSaldoInicial = new JTextField();
-		txtSaldoInicial.addFocusListener(new FocusAdapter() {
+		txtSaldo = new JTextField();
+		txtSaldo.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(txtSaldoInicial.getText().equals("") || txtSaldoInicial.getText().trim().equals("")) {
+				if(txtSaldo.getText().equals("") || txtSaldo.getText().trim().equals("")) {
 					JOptionPane.showMessageDialog(null,"Número Saldo Inicial obrigatório");
-					txtSaldoInicial.setFocusable(true);
-					txtSaldoInicial.requestFocus();
+					txtSaldo.setFocusable(true);
+					txtSaldo.requestFocus();
 				}
 			}
 		});
-		txtSaldoInicial.setColumns(10);
-		txtSaldoInicial.setBounds(276, 45, 156, 20);
-		contentPane.add(txtSaldoInicial);
+		txtSaldo.setColumns(10);
+		txtSaldo.setBounds(276, 45, 156, 20);
+		contentPane.add(txtSaldo);
 		
 		JLabel lblRendimento = new JLabel("Rendimento:");
 		lblRendimento.setBounds(293, 76, 101, 23);
@@ -169,14 +187,51 @@ public class JanelaPoupanca extends JFrame {
 		txtRendimento.setBounds(276, 110, 156, 20);
 		contentPane.add(txtRendimento);
 		
-		textValor = new JTextField();
-		textValor.setText("Valor:");
-		textValor.setBounds(10, 271, 156, 125);
-		contentPane.add(textValor);
-		textValor.setColumns(10);
+		txtValor = new JTextField();
+		txtValor.setText("Valor:");
+		txtValor.setBounds(10, 271, 156, 125);
+		contentPane.add(txtValor);
+		txtValor.setColumns(10);
 		
-		btnVerificaSaldo = new JButton("Verificar Saldo");
-		btnVerificaSaldo.setBounds(24, 237, 113, 23);
-		contentPane.add(btnVerificaSaldo);
+		btnVerificarSaldo = new JButton("Verificar Saldo");
+		btnVerificarSaldo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(btnVerificarSaldo.getText().equals("Abrir Conta")) {
+					cp.setNumeroBanco(Long.parseLong(txtNumeroBanco.getText()));
+					cp.setAgencia(Integer.parseInt(txtAgencia.getText()));
+					cp.setNumeroConta(Long.parseLong(txtNumeroConta.getText()));
+					cp.setTitular(txtTitular.getText());
+					cp.setSaldo(Double.parseDouble(txtSaldo.getText()));
+					cp.setRendimento(Double.parseDouble(txtRendimento.getText()));
+					
+					//Vamos trocar o texto do botão
+					btnVerificarSaldo.setText("Verificar Saldo");
+					
+					//desabilitar as caixa de texto
+					txtNumeroBanco.setEnabled(false);
+					txtAgencia.setEnabled(false);
+					txtNumeroConta.setEnabled(false);
+					txtTitular.setEnabled(false);
+					txtSaldo.setEnabled(false);
+					txtRendimento.setEnabled(false);
+					
+					//habilitar os botões sacar e depositar
+					btnDepositar.setEnabled(true);
+					btnSacar.setEnabled(true);
+					txtValor.setEnabled(true);
+					
+					
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null,"Seu dado é R$"+cp.getSaldo());
+				}
+				
+				
+			}
+		});
+		btnVerificarSaldo.setBounds(24, 237, 113, 23);
+		contentPane.add(btnVerificarSaldo);
 	}
 }

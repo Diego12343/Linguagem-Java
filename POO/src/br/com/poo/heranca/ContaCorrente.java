@@ -9,10 +9,19 @@ public class ContaCorrente extends ContaBancaria {
     public ContaCorrente(double limite) {
     	this.limite = limite;
     	limiteInicial = limite;
+    	
     }
     
     
-    public ContaCorrente(Long numeroBanco, int agencia, Long numeConta, String titular, double saldo,double limite) {
+    public double getLimite() {
+		return limite;
+	}
+
+	public void setLimite(double limite) {
+		this.limite = limite;
+	}
+
+	public ContaCorrente(Long numeroBanco, int agencia, Long numeConta, String titular, double saldo,double limite) {
     	super.setNumeroBanco(numeroBanco);
     	super.setAgencia(agencia);
     	super.setNumeroConta(numeConta);
